@@ -17,8 +17,9 @@ window.findNRooksSolution = function(n) {
   var board = new Board({n: n});
 
   for (var x = 0; x < n; x++) {
+    //beginning of row
     var y = 0;
-    //set piece fo x + 1
+    //set piece for x 
     board.togglePiece(x, y);
     while (board.hasAnyRooksConflicts()) {
       //remove piece
@@ -45,16 +46,19 @@ window.countNRooksSolutions = function(n) {
       //set piece for current x and y
       board.togglePiece(x, y);
       if (!board.hasAnyRooksConflicts()) {
-        //still have more rows to search
+        //no conflict
+        //check to if row continues
         if (x + 1 < n) {
           recurse(x + 1);
-        } else { 
+        } else {
+          //end of row, no conflicts 
           //found solution
           solutionCount++;
         }
       }
       //remove piece for current x and y
       board.togglePiece(x, y);
+      //recurse back
     }
   };
 
@@ -76,12 +80,13 @@ window.findNQueensSolution = function(n) {
       if (!board.hasAnyQueensConflicts()) {
         //still within bounds
         if (x + 1 < n) {
+          //recurse and find possible solution
           var trial = recurse(x + 1);
-          //if successful
+          //if solution was successful
           if (trial !== false) {
             return trial;
           }
-        //start over with new row;
+        //start over on new row;
         } else {
           return board.rows();
         }
@@ -89,7 +94,7 @@ window.findNQueensSolution = function(n) {
       //remove piece
       board.togglePiece(x, y);
     }
-    //solution fail
+    //solution fail, end of recurse
     return false;
   };
 
@@ -108,6 +113,7 @@ window.countNQueensSolutions = function(n) {
   var x = 0;
   var solutionCount = 0; 
 
+  //edge case
   if (n === 0) {
     return 1;
   }
@@ -117,7 +123,8 @@ window.countNQueensSolutions = function(n) {
       //set piece for current x and y
       board.togglePiece(x, y);
       if (!board.hasAnyQueensConflicts()) {
-        //still have more rows to search
+        //no conflicts
+        //check if more rows exist
         if (x + 1 < n) {
           recurse(x + 1);
         } else { 
@@ -132,7 +139,6 @@ window.countNQueensSolutions = function(n) {
 
   recurse(x);
 
-  console.log(solutionCount);
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };
